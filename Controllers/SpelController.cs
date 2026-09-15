@@ -126,6 +126,25 @@ public class SpelController : ControllerBase
         return spel;
     }
 
+    // DELETE: /api/spel/{id}
+    // Not required by the assignment, but it costs almost nothing to add.
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> TaBort(int id)
+    {
+        var spel = await _context.Spel.FindAsync(id);
+
+        if (spel == null)
+            return NotFound();
+
+        _context.Spel.Remove(spel);
+        await _context.SaveChangesAsync();
+
+        // Remove the image file too, so a deleted game does not leave a file behind.
+        TaBortUppladdadBild(spel.BildUrl);
+
+        return NoContent();
+    }
+
     private string WebRoot => _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
 
     // Removes an image that was uploaded through the API.
