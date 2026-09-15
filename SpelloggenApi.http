@@ -1,0 +1,54 @@
+# Requests for trying the API from Visual Studio or VS Code (REST Client).
+# Start the API with "dotnet run" first.
+
+@api = http://localhost:5080
+
+### List all games
+GET {{api}}/api/spel
+
+### Get one game
+GET {{api}}/api/spel/1
+
+### Create a game
+POST {{api}}/api/spel
+Content-Type: application/json
+
+{
+  "titel": "Valorant",
+  "plattform": "PC",
+  "status": "Vill testa",
+  "rank": null,
+  "speladeTimmar": 0,
+  "senastSpelad": "2026-09-15T00:00:00",
+  "anteckningar": "Kompisarna tjatar om att jag ska testa."
+}
+
+### Update a game
+PUT {{api}}/api/spel/6
+Content-Type: application/json
+
+{
+  "id": 6,
+  "titel": "FIFA 25",
+  "plattform": "PC",
+  "status": "Slutat",
+  "rank": null,
+  "speladeTimmar": 45,
+  "senastSpelad": "2026-04-18T00:00:00",
+  "anteckningar": "Slutade helt, blev aldrig kul."
+}
+
+### Upload a cover image
+# Put any .jpg, .png or .webp next to this file and name it cover.png.
+POST {{api}}/api/spel/6/bild
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="fil"; filename="cover.png"
+Content-Type: image/png
+
+< ./cover.png
+--boundary--
+
+### Delete a game
+DELETE {{api}}/api/spel/7
