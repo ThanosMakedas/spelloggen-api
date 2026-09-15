@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#150a22"/>
+      <stop offset="1" stop-color="#07080d"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <polygon id="hex" points="0,-24 20.8,-12 20.8,12 0,24 -20.8,12 -20.8,-12"/>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <!-- A small hex board with two units on it -->
+  <g fill="none" stroke="#b36bff" stroke-opacity="0.6" stroke-width="2">
+    <use href="#hex" x="420" y="80"/><use href="#hex" x="465" y="80"/><use href="#hex" x="510" y="80"/><use href="#hex" x="555" y="80"/>
+    <use href="#hex" x="442.5" y="118"/><use href="#hex" x="487.5" y="118"/><use href="#hex" x="532.5" y="118"/><use href="#hex" x="577.5" y="118"/>
+    <use href="#hex" x="420" y="156"/><use href="#hex" x="465" y="156"/><use href="#hex" x="510" y="156"/><use href="#hex" x="555" y="156"/>
+    <use href="#hex" x="442.5" y="194"/><use href="#hex" x="487.5" y="194"/><use href="#hex" x="532.5" y="194"/><use href="#hex" x="577.5" y="194"/>
+  </g>
+  <g fill="#ff3ea5" filter="url(#glow)">
+    <use href="#hex" x="465" y="80"/>
+    <use href="#hex" x="532.5" y="194"/>
+  </g>
+  <text x="40" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="56" font-weight="800" fill="#f3e6ff" filter="url(#glow)">TEAMFIGHT</text>
+  <text x="43" y="324" font-family="Segoe UI, Arial, sans-serif" font-size="18" letter-spacing="6" fill="#b36bff">TACTICS</text>
+</svg>
