@@ -50,4 +50,31 @@ public class SpelController : ControllerBase
 
         return CreatedAtAction(nameof(GetEtt), new { id = spel.Id }, spel);
     }
+
+    // PUT: /api/spel/{id}
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Uppdatera(int id, Spel spel)
+    {
+        var befintligt = await _context.Spel.FindAsync(id);
+
+        if (befintligt == null)
+            return NotFound();
+
+        befintligt.Titel = spel.Titel;
+        befintligt.Plattform = spel.Plattform;
+        befintligt.Status = spel.Status;
+        befintligt.Rank = spel.Rank;
+        befintligt.SpeladeTimmar = spel.SpeladeTimmar;
+        befintligt.SenastSpelad = spel.SenastSpelad;
+        befintligt.Anteckningar = spel.Anteckningar;
+
+        // Keep the stored cover when the client does not send one, so editing
+        // a game from the form cannot wipe an image that was uploaded earlier.
+        if (spel.BildUrl != null)
+            befintligt.BildUrl = spel.BildUrl;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
