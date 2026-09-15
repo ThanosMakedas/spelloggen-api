@@ -9,11 +9,16 @@ namespace SpelloggenApi.Controllers;
 [Route("api/spel")]
 public class SpelController : ControllerBase
 {
-    private readonly SpelloggenContext _context;
+    private const long MaxBildStorlek = 5 * 1024 * 1024;
+    private static readonly string[] TillatnaFilandelser = { ".jpg", ".jpeg", ".png", ".webp" };
 
-    public SpelController(SpelloggenContext context)
+    private readonly SpelloggenContext _context;
+    private readonly IWebHostEnvironment _env;
+
+    public SpelController(SpelloggenContext context, IWebHostEnvironment env)
     {
         _context = context;
+        _env = env;
     }
 
     // GET: /api/spel
@@ -76,5 +81,66 @@ public class SpelController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    // POST: /api/spel/{id}/bild
+    // Saves the file in wwwroot/uploads and stores its URL on the game.
+    [HttpPost("{id}/bild")]
+    public async Task<ActionResult<Spel>> LaddaUppBild(int id, IFormFile? fil)
+    {
+        var spel = await _context.Spel.FindAsync(id);
+
+        if (spel == null)
+            return NotFound();
+
+        if (fil == null || fil.Length == 0)
+            return BadRequest("Ingen fil skickades.");
+
+        if (fil.Length > MaxBildStorlek)
+            return BadRequest("Filen är större än 5 MB.");
+
+        // No SVG here: it can contain scripts and would be served from our own origin.
+        var filandelse = Path.GetExtension(fil.FileName).ToLowerInvariant();
+
+        if (!TillatnaFilandelser.Contains(filandelse))
+            return BadRequest("Endast .jpg, .jpeg, .png och .webp är tillåtna.");
+
+        // A new random name, so two uploads never overwrite each other
+        // and the file name from the client is never used as a path.
+        var filnamn = $"{Guid.NewGuid()}{filandelse}";
+        var mapp = Path.Combine(WebRoot, "uploads");
+        Directory.CreateDirectory(mapp);
+
+        using (var stream = System.IO.File.Create(Path.Combine(mapp, filnamn)))
+        {
+            await fil.CopyToAsync(stream);
+        }
+
+        var gammalBild = spel.BildUrl;
+        spel.BildUrl = $"/uploads/{filnamn}";
+        await _context.SaveChangesAsync();
+
+        // Only remove the old image once the new one is saved.
+        TaBortUppladdadBild(gammalBild);
+
+        return spel;
+    }
+
+    private string WebRoot => _env.WebRootPath ?? Path.Combine(_env.ContentRootPath, "wwwroot");
+
+    // Removes an image that was uploaded through the API.
+    // The seeded covers are .svg files that belong to the repo, so those are kept.
+    private void TaBortUppladdadBild(string? bildUrl)
+    {
+        if (string.IsNullOrEmpty(bildUrl) || !bildUrl.StartsWith("/uploads/"))
+            return;
+
+        if (bildUrl.EndsWith(".svg", StringComparison.OrdinalIgnoreCase))
+            return;
+
+        var sokvag = Path.Combine(WebRoot, "uploads", Path.GetFileName(bildUrl));
+
+        if (System.IO.File.Exists(sokvag))
+            System.IO.File.Delete(sokvag);
     }
 }
