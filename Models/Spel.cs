@@ -10,7 +10,8 @@ public class Spel
 {
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "Titel is required")]
+    // Swedish, because the web app shows this message to the user as it is.
+    [Required(ErrorMessage = "Titel måste fyllas i.")]
     [MaxLength(200)]
     public string Titel { get; set; } = "";
 
