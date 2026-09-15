@@ -1,23 +1,30 @@
+using Microsoft.EntityFrameworkCore;
+using SpelloggenApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<SpelloggenContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// Create the SQLite file on first run so the only startup step is "dotnet run".
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
+    var db = scope.ServiceProvider.GetRequiredService<SpelloggenContext>();
+    db.Database.EnsureCreated();
 }
 
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.UseAuthorization();
-
+// No UseHttpsRedirection: it would force the reader to trust a dev certificate first.
+// No UseAuthorization: this project has no auth.
 app.MapControllers();
 
 app.Run();
