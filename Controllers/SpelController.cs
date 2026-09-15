@@ -37,4 +37,17 @@ public class SpelController : ControllerBase
 
         return spel;
     }
+
+    // POST: /api/spel
+    [HttpPost]
+    public async Task<ActionResult<Spel>> Skapa(Spel spel)
+    {
+        // Id is assigned by the database, ignore whatever the client sent.
+        spel.Id = 0;
+
+        _context.Spel.Add(spel);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetEtt), new { id = spel.Id }, spel);
+    }
 }
