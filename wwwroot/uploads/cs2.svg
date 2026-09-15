@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05161f"/>
+      <stop offset="1" stop-color="#07080d"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <!-- A crosshair -->
+  <circle cx="480" cy="170" r="110" fill="none" stroke="#38bdf8" stroke-opacity="0.2" stroke-width="2"/>
+  <g stroke="#38bdf8" stroke-width="6" stroke-linecap="round" filter="url(#glow)">
+    <line x1="480" y1="90" x2="480" y2="145"/>
+    <line x1="480" y1="195" x2="480" y2="250"/>
+    <line x1="400" y1="170" x2="455" y2="170"/>
+    <line x1="505" y1="170" x2="560" y2="170"/>
+  </g>
+  <circle cx="480" cy="170" r="5" fill="#38bdf8" filter="url(#glow)"/>
+  <text x="40" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="56" font-weight="800" fill="#e0f6ff" filter="url(#glow)">CS2</text>
+  <text x="43" y="324" font-family="Segoe UI, Arial, sans-serif" font-size="18" letter-spacing="6" fill="#38bdf8">COUNTER-STRIKE 2</text>
+</svg>
