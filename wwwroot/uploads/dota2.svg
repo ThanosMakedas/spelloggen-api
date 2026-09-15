@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="360" viewBox="0 0 640 360">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c0708"/>
+      <stop offset="1" stop-color="#07080d"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="640" height="360" fill="url(#bg)"/>
+  <!-- The river between the two bases -->
+  <line x1="330" y1="360" x2="640" y2="100" stroke="#38bdf8" stroke-opacity="0.3" stroke-width="22"/>
+  <g fill="none" stroke-width="3" filter="url(#glow)">
+    <circle cx="410" cy="110" r="34" stroke="#39ff88"/>
+    <circle cx="580" cy="290" r="34" stroke="#ff3b3b"/>
+  </g>
+  <text x="40" y="290" font-family="Segoe UI, Arial, sans-serif" font-size="56" font-weight="800" fill="#ffe3e3" filter="url(#glow)">DOTA 2</text>
+  <text x="43" y="324" font-family="Segoe UI, Arial, sans-serif" font-size="18" letter-spacing="6" fill="#ff3b3b">RADIANT VS DIRE</text>
+</svg>
