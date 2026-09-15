@@ -24,4 +24,17 @@ public class SpelController : ControllerBase
             .OrderByDescending(s => s.SenastSpelad)
             .ToListAsync();
     }
+
+    // GET: /api/spel/{id}
+    // The mobile app needs this for its detail screen.
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Spel>> GetEtt(int id)
+    {
+        var spel = await _context.Spel.FindAsync(id);
+
+        if (spel == null)
+            return NotFound();
+
+        return spel;
+    }
 }
