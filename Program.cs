@@ -35,6 +35,10 @@ app.UseSwaggerUI();
 
 app.UseCors("frontend");
 
+// Serves wwwroot, which is where the cover images live.
+// UseStaticFiles and not MapStaticAssets, because uploaded files do not exist at build time.
+app.UseStaticFiles();
+
 // No UseHttpsRedirection: it would force the reader to trust a dev certificate first.
 // No UseAuthorization: this project has no auth.
 app.MapControllers();
